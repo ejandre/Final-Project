@@ -6,6 +6,7 @@ import os
 import sqlite3
 import spotipy.util as util
 from bs4 import BeautifulSoup
+import lyricsgenius
 
 def grab_spotify_top_tracks(username,scope,client_id,client_secret,redirect_uri):
     song_artist = {}
@@ -25,5 +26,11 @@ eric = grab_spotify_top_tracks('Ejandre','user-top-read','3b54d53b0c474780af4fa8
 
 
 
-def get_song_info():
-    pass
+def get_song_info(song,artist):
+    gen_obj = lyricsgenius.Genius("uwm7hKHlSCzTd6jsJVxKx0CGv_TumqMn-YK4Eh1WNBkwAEYz5tbWSU31iYfrQaOO")
+    song = gen_obj.search_song(song, artist)
+    lyrics = song.lyrics
+    print(lyrics)
+    return lyrics
+
+print(get_song_info("Misty Morning","Lawrence"))
