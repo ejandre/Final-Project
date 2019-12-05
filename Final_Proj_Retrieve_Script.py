@@ -31,11 +31,24 @@ def get_song_lyrics(song,artist):
     print(lyrics)
     return lyrics
 
-def write_lyrics_to_txt(lyrics):
-    pass
+def write_lyrics_to_txt(lyrics,filename):
+    f = open(filename, "w")
+    f.write(lyrics)
 
-def check_frequency_of_words():
-    pass
+def check_frequency_of_words(text):
+    freq = {}
+    read_txt = open(text, "r")
+    for word in read_txt.readlines():
+        word = word.lower()
+        for w in word.split():
+            if w not in freq:
+                freq[w] = 1
+            else:
+                freq[w] += 1
+    return freq
+
+    
+
 
     
 
