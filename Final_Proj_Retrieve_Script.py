@@ -21,11 +21,6 @@ def grab_spotify_top_tracks(username,scope,client_id,client_secret,redirect_uri)
     return song_artist
 
 
-#eric = grab_spotify_top_tracks('Ejandre','user-top-read','3b54d53b0c474780af4fa86c0242364b','42c07ded757a42d69d12beef09424504','https://accounts.spotify.com/authorize')
-#shanley =  grab_spotify_top_tracks('','','','','https://accounts.spotify.com/authorize')
-
-
-
 def get_song_lyrics(song,artist):
     gen_obj = lyricsgenius.Genius("uwm7hKHlSCzTd6jsJVxKx0CGv_TumqMn-YK4Eh1WNBkwAEYz5tbWSU31iYfrQaOO")
     gen_obj.remove_section_headers = True
@@ -55,13 +50,10 @@ def check_frequency_of_words(text):
     
 
 
-    
-
-
 def main():
-    eric = grab_spotify_top_tracks('Ejandre','user-top-read','3b54d53b0c474780af4fa86c0242364b','42c07ded757a42d69d12beef09424504','https://accounts.spotify.com/authorize')
-
-    for x in eric:
+    person1 = grab_spotify_top_tracks('Ejandre','user-top-read','3b54d53b0c474780af4fa86c0242364b','42c07ded757a42d69d12beef09424504','https://accounts.spotify.com/authorize')
+    person2 = grab_spotify_top_tracks('Shanley Corvite','user-top-read','477f0c7f45be49758dd061c8c15176a1','a758f2131c0346e79e88383664260be0','https://accounts.spotify.com/authorize')
+    for x in person1:
         try:
             lyr = get_song_lyrics(x[0],x[1])
         except:
@@ -69,6 +61,15 @@ def main():
 
         write_lyrics_to_txt(lyr, "lyrics.txt")
     print(check_frequency_of_words("lyrics.txt"))
+
+    for y in person2:
+        try:
+            lyr2 = get_song_lyrics(y[0],y[1])
+        except:
+            continue
+        write_lyrics_to_txt(lyr2, "lyrics2.txt")
+
+    print(check_frequency_of_words("lyrics2.txt"))
 
 
 if __name__ == "__main__":
