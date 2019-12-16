@@ -6,6 +6,7 @@ import sqlite3
 import spotipy.util as util
 import lyricsgenius
 from spotipy.oauth2 import SpotifyClientCredentials
+#import matplotlib
 
 #grabbing the top spotify tracks from a user's spotify account 
 #returning a list of tuples [(song, artist), (song, artist), and so on...]
@@ -59,7 +60,8 @@ def check_frequency_of_words(text):
                 freq[w] = 1
             else:
                 freq[w] += 1
-    return sorted(freq.items(), key=lambda x: x[1], reverse=True)
+    x = sorted(freq.items(), key=lambda x: x[1], reverse=True)
+    return x[:100]
 
 def setUpDatabase(db_name):                                
     path = os.path.dirname(os.path.abspath(__file__))
@@ -83,14 +85,24 @@ def add_user_tracks(tracks, cur, conn):
             count += 1
         conn.commit()
 
+
 #creates a table for word, frequency for user
 def add_user_lyrics(x, cur, conn):
     x = check_frequency_of_words('lyrics.txt')
     conn = sqlite3.connect('MainDatabase.db')
     cur = conn.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS UserLyrics (word TEXT, frequency INTEGER)")
+    cur.execute("CREATE TABLE IF NOT EXISTS UserLyrics (word TEXT UNIQUE PRIMARY KEY, frequency INTEGER)")
     cur.executemany("INSERT INTO UserLyrics (word, frequency) VALUES (?, ?)", x)
-    conn.commit()    
+    #count = 0
+    #for word in x:
+    #    if count == 20:
+        #    break
+        #hui = cur.execute("SELECT word, frequency FROM UserLyrics WHERE word = ? and frequency = ?", (word[0], word[1])).fetchone()
+        #if cur.execute("SELECT word, frequency FROM UserLyrics WHERE word = ? and frequency = ?", (word[0], word[1])).fetchone() == None:
+        #    cur.execute("INSERT INTO UserLyrics(word, frequency) VALUES (?, ?)", (word[0], word[1]))
+        #    count += 1
+    conn.commit()
+
 
 #creates a table for song, artist, album for drake
 def add_drake_tracks(tracks, cur, conn):
@@ -116,6 +128,7 @@ def add_drake_lyrics(x, cur, conn):
     cur.execute("CREATE TABLE IF NOT EXISTS DrakeLyrics (word TEXT, frequency INTEGER)")
     cur.executemany("INSERT INTO DrakeLyrics (word, frequency) VALUES (?, ?)", x)
     conn.commit()
+
 
 def main():
     #person1 = grab_spotify_top_tracks('Ejandre','user-top-read','3b54d53b0c474780af4fa86c0242364b','42c07ded757a42d69d12beef09424504','https://accounts.spotify.com/authorize')
@@ -151,7 +164,6 @@ def main():
     add_drake_tracks(tracks, cur, conn)
     add_drake_lyrics(x, cur, conn)
     conn.close()
-
    
 
 if __name__ == "__main__":
